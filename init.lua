@@ -737,13 +737,14 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
+    --'folke/tokyonight.nvim',
+    'sainnhe/gruvbox-material',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     init = function()
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+      vim.cmd.colorscheme 'gruvbox-material'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
@@ -820,7 +821,8 @@ require('lazy').setup({
       --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
     end,
   },
-  { -- Lualine
+  -- Lualine
+  {
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
@@ -835,13 +837,16 @@ require('lazy').setup({
     config = function()
       require('bufferline').setup {
         options = {
-          offsets = { { filetype = 'NvimTree', text = 'File Explorer', text_align = 'center', separator = true } },
+          offsets = { { filetype = 'NvimTree', separator = false, highlight = 'NvimTreeNormal' } },
+          separator_style = 'slant',
+          diagnostics = 'nvim_lsp',
         },
         vim.keymap.set('n', 'L', ':BufferLineCycleNext<CR>', { silent = true }),
         vim.keymap.set('n', 'H', ':BufferLineCyclePrev<CR>', { silent = true }),
       }
     end,
   },
+  -- Dashboard
   {
     'nvimdev/dashboard-nvim',
     event = 'VimEnter',
