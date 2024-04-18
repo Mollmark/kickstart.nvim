@@ -5,7 +5,7 @@ return {
   config = function()
     require('bufferline').setup {
       options = {
-        offsets = { { filetype = 'NvimTree', separator = false, highlight = 'NvimTreeNormal' } },
+        offsets = { { filetype = 'neo-tree', separator = false, highlight = 'NeoTreeNormal' } },
         separator_style = 'slant',
         diagnostics = 'nvim_lsp',
       },
