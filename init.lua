@@ -559,8 +559,7 @@ require('lazy').setup({
         tsserver = {},
         tailwindcss = {},
         cssls = {},
-        --
-
+        clojure_lsp = {},
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
