@@ -88,7 +88,7 @@ P.S. You can delete this when you're done too. It's your config now! :)
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+vim.g.maplocalleader = ','
 
 -- Set to true if you have a Nerd Font installed
 vim.g.have_nerd_font = true
@@ -745,6 +745,7 @@ require('lazy').setup({
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
     --'folke/tokyonight.nvim',
     -- 'sainnhe/gruvbox-material',
+    --'diegoulloao/neofusion.nvim',
     'catppuccin/nvim',
     name = 'catppuccin',
     priority = 1000, -- Make sure to load this before all the other start plugins.
