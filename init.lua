@@ -560,6 +560,7 @@ require('lazy').setup({
         tailwindcss = {},
         cssls = {},
         clojure_lsp = {},
+        intelephense = {},
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
