@@ -8,4 +8,6 @@ return {
   vim.keymap.set('n', '<leader>gt', ':Gitsigns toggle_current_line_blame<CR>', { desc = 'Gitsigns toggle line blame' }),
   vim.keymap.set('n', '<leader>gs', ':Telescope git_status<CR>', { desc = 'Open git status' }),
   vim.keymap.set('n', '<leader>gcc', ':Telescope git_commits<CR>', { desc = 'Open git commits' }),
+  vim.keymap.set('n', '<leader>gh', ':DiffviewFileHistory %<CR>', { desc = 'Diffview git history current file' }),
+  vim.keymap.set('n', '<leader>ghq', ':DiffviewClose<CR>', { desc = 'Close diffview git history' }),
 }
