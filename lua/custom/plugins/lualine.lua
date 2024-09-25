@@ -6,6 +6,11 @@ return {
       options = {
         theme = 'gruvbox-material',
       },
+      sections = {
+        lualine_c = {
+          { 'filename', path = 2 },
+        },
+      },
     }
   end,
 }

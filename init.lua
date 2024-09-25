@@ -164,7 +164,7 @@ vim.opt.fillchars = { eob = ' ' }
 
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
 vim.opt.hlsearch = true
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+vim.keymap.set('n', '<Esc><Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
@@ -366,6 +366,9 @@ require('lazy').setup({
             hidden = true,
             path_display = { 'truncate' },
           },
+          lsp_references = {
+            show_line = false,
+          },
         },
         extensions = {
           ['ui-select'] = {
@@ -563,10 +566,28 @@ require('lazy').setup({
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
         tsserver = {},
-        tailwindcss = {},
+        tailwindcss = {
+          filetypes = {
+            'css',
+            'less',
+            'sass',
+            'scss',
+            'html',
+            'js',
+            'javascript',
+            'javascriptreact',
+            'typescript',
+            'typescriptreact',
+          },
+        },
         cssls = {},
         clojure_lsp = {},
-        intelephense = {},
+        intelephense = {
+          flags = {
+            allow_incremental_sync = false,
+            debounce_text_changes = 500,
+          },
+        },
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
@@ -823,6 +844,7 @@ require('lazy').setup({
         'javascript',
         'typescript',
         'css',
+        'scss',
         'tsx',
         'clojure',
         'fennel',

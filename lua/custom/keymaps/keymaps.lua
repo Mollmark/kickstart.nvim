@@ -10,4 +10,5 @@ return {
   vim.keymap.set('n', '<leader>gcc', ':Telescope git_commits<CR>', { desc = 'Open git commits' }),
   vim.keymap.set('n', '<leader>gh', ':DiffviewFileHistory %<CR>', { desc = 'Diffview git history current file' }),
   vim.keymap.set('n', '<leader>ghq', ':DiffviewClose<CR>', { desc = 'Close diffview git history' }),
+  vim.keymap.set('n', '-', ':Oil<CR>', { desc = 'Open parent directory oil' }),
 }
