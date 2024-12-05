@@ -374,12 +374,16 @@ require('lazy').setup({
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
           },
+          quicknote = {
+            defaultScope = 'CWD',
+          },
         },
       }
 
       -- Enable Telescope extensions if they are installed
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
+      pcall(require('telescope').load_extension, 'quicknote')
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
@@ -640,7 +644,7 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
+        local disable_filetypes = { c = true, cpp = true, js = true, php = true, scss = true, css = true }
         return {
           timeout_ms = 500,
           lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
@@ -771,84 +775,90 @@ require('lazy').setup({
     --'folke/tokyonight.nvim',
     --'sainnhe/gruvbox-material',
     --'diegoulloao/neofusion.nvim',
-    'catppuccin/nvim',
-    name = 'catppuccin',
+    --'catppuccin/nvim',
+    'cpwrs/americano.nvim',
+    name = 'americano',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     init = function()
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'
-      require('catppuccin').setup {
-        flavour = 'auto', -- latte, frappe, macchiato, mocha
-        background = { -- :h background
-          light = 'latte',
-          dark = 'mocha',
-        },
-        transparent_background = true, -- disables setting the background color.
-        show_end_of_buffer = false, -- shows the '~' characters after the end of buffers
-        term_colors = false, -- sets terminal colors (e.g. `g:terminal_color_0`)
-        dim_inactive = {
-          enabled = false, -- dims the background color of inactive window
-          shade = 'dark',
-          percentage = 0.15, -- percentage of the shade to apply to the inactive window
-        },
-        no_italic = false, -- Force no italic
-        no_bold = false, -- Force no bold
-        no_underline = false, -- Force no underline
-        styles = { -- Handles the styles of general hi groups (see `:h highlight-args`):
-          comments = { 'italic' }, -- Change the style of comments
-          conditionals = { 'italic' },
-          loops = {},
-          functions = {},
-          keywords = {},
-          strings = {},
-          variables = {},
-          numbers = {},
-          booleans = {},
-          properties = {},
-          types = {},
-          operators = {},
-          -- miscs = {}, -- Uncomment to turn off hard-coded styles
-        },
-        color_overrides = {},
-        custom_highlights = {},
-        default_integrations = true,
-        integrations = {
-          cmp = true,
-          gitsigns = true,
-          nvimtree = true,
-          treesitter = true,
-          notify = true,
-          noice = true,
-          telescope = true,
-          mini = {
-            enabled = true,
-            indentscope_color = '',
-          },
-          native_lsp = {
-            enabled = true,
-            virtual_text = {
-              errors = { 'italic' },
-              hints = { 'italic' },
-              warnings = { 'italic' },
-              information = { 'italic' },
-              ok = { 'italic' },
-            },
-            underlines = {
-              errors = { 'underline' },
-              hints = { 'underline' },
-              warnings = { 'underline' },
-              information = { 'underline' },
-              ok = { 'underline' },
-            },
-            inlay_hints = {
-              background = true,
-            },
-          },
-          -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
-        },
+      require('americano').colorscheme()
+      require('americano').setup {
+        terminal = true, -- Set terminal colors
+        overrides = {}, -- Override americano highlight groups
       }
-      vim.cmd.colorscheme 'catppuccin'
+      -- require('catppuccin').setup {
+      --   flavour = 'auto', -- latte, frappe, macchiato, mocha
+      --   background = { -- :h background
+      --     light = 'latte',
+      --     dark = 'mocha',
+      --   },
+      --   transparent_background = true, -- disables setting the background color.
+      --   show_end_of_buffer = false, -- shows the '~' characters after the end of buffers
+      --   term_colors = false, -- sets terminal colors (e.g. `g:terminal_color_0`)
+      --   dim_inactive = {
+      --     enabled = false, -- dims the background color of inactive window
+      --     shade = 'dark',
+      --     percentage = 0.15, -- percentage of the shade to apply to the inactive window
+      --   },
+      --   no_italic = false, -- Force no italic
+      --   no_bold = false, -- Force no bold
+      --   no_underline = false, -- Force no underline
+      --   styles = { -- Handles the styles of general hi groups (see `:h highlight-args`):
+      --     comments = { 'italic' }, -- Change the style of comments
+      --     conditionals = { 'italic' },
+      --     loops = {},
+      --     functions = {},
+      --     keywords = {},
+      --     strings = {},
+      --     variables = {},
+      --     numbers = {},
+      --     booleans = {},
+      --     properties = {},
+      --     types = {},
+      --     operators = {},
+      --     -- miscs = {}, -- Uncomment to turn off hard-coded styles
+      --   },
+      --   color_overrides = {},
+      --   custom_highlights = {},
+      --   default_integrations = true,
+      --   integrations = {
+      --     cmp = true,
+      --     gitsigns = true,
+      --     nvimtree = true,
+      --     treesitter = true,
+      --     notify = true,
+      --     noice = true,
+      --     telescope = true,
+      --     mini = {
+      --       enabled = true,
+      --       indentscope_color = '',
+      --     },
+      --     native_lsp = {
+      --       enabled = true,
+      --       virtual_text = {
+      --         errors = { 'italic' },
+      --         hints = { 'italic' },
+      --         warnings = { 'italic' },
+      --         information = { 'italic' },
+      --         ok = { 'italic' },
+      --       },
+      --       underlines = {
+      --         errors = { 'underline' },
+      --         hints = { 'underline' },
+      --         warnings = { 'underline' },
+      --         information = { 'underline' },
+      --         ok = { 'underline' },
+      --       },
+      --       inlay_hints = {
+      --         background = true,
+      --       },
+      --     },
+      --     -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
+      --   },
+      -- }
+      -- vim.cmd.colorscheme 'catppuccin'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
@@ -879,17 +889,17 @@ require('lazy').setup({
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
+      -- local statusline = require 'mini.statusline'
       -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
+      -- statusline.setup { use_icons = vim.g.have_nerd_font }
 
       -- You can configure sections in the statusline by overriding their
       -- default behavior. For example, here we set the section for
       -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
+      -- @diagnostic disable-next-line: duplicate-set-field
+      -- statusline.section_location = function()
+      --return '%2l:%-2v'
+      -- end
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
