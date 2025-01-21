@@ -1,10 +1,11 @@
 return {
   'stevearc/oil.nvim',
   ---@module 'oil'
-  opts = {},
-  view_options = {
+  opts = {
+    view_options = {
 
-    show_hidden = true,
+      show_hidden = true,
+    },
   },
   -- Optional dependencies
   -- dependencies = { { 'echasnovski/mini.icons', opts = {} } },

@@ -212,6 +212,11 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
+  pattern = { '*.norg' },
+  command = 'set conceallevel=3',
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -566,7 +571,7 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
-        tsserver = {},
+        ts_ls = {},
         tailwindcss = {
           filetypes = {
             'css',
@@ -644,7 +649,7 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true, js = true, php = true, scss = true, css = true }
+        local disable_filetypes = { c = true, cpp = true, php = true, scss = true, css = true }
         return {
           timeout_ms = 500,
           lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
@@ -657,7 +662,7 @@ require('lazy').setup({
         --
         -- You can use a sub-list to tell conform to run *until* a formatter
         -- is found.
-        -- javascript = { { "prettierd", "prettier" } },
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
       },
     },
   },
@@ -762,8 +767,14 @@ require('lazy').setup({
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'path' },
+          { name = 'codeium' },
         },
       }
+      cmp.setup.filetype({ 'sql' }, {
+        sources = {
+          { name = 'vim-dadbod-completion' },
+        },
+      })
     end,
   },
 
@@ -783,7 +794,6 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'
-      require('americano').colorscheme()
       require('americano').setup {
         terminal = true, -- Set terminal colors
         overrides = {}, -- Override americano highlight groups
@@ -858,10 +868,25 @@ require('lazy').setup({
       --     -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
       --   },
       -- }
-      -- vim.cmd.colorscheme 'catppuccin'
-
+      vim.cmd.colorscheme 'americano'
+      --vim.cmd 'highlight TelescopeBorder guibg=none'
+      --vim.cmd 'highlight TelescopeTitle guibg=none'
+      --vim.cmd 'highlight TelescopePrompt guibg=none'
+      --vim.cmd 'highlight TelescopePreviewNormal guibg=none'
+      --vim.cmd 'highlight TelescopeResultNormal fg=#ffffff'
+      --vim.cmd 'highlight TelescopePromptNormal fg=#ffffff'
+      --vim.api.nvim_set_hl(0, 'FloatBorder', {bg='#3B4252', fg='#5E81AC'})
+      vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+      vim.api.nvim_set_hl(0, 'TelescopeNormal', { bg = 'none' })
+      vim.api.nvim_set_hl(0, 'TelescopeBorder', { bg = 'none' })
+      vim.api.nvim_set_hl(0, 'TelescopePreviewTitle', { bg = 'none' })
+      vim.api.nvim_set_hl(0, 'TelescopePreviewTitle', { fg = 'none' })
+      vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', { bg = 'none' })
+      vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', { fg = '#625f5f' })
+      vim.api.nvim_set_hl(0, 'Whitespace', { fg = '#373434' })
       -- You can configure highlights by doing something like:
-      vim.cmd.hi 'Comment gui=none'
+      -- vim.cmd.hi 'Comment gui=none'
+      vim.cmd.hi 'Normal guibg=none'
     end,
   },
 

@@ -11,8 +11,4 @@ return {
   vim.keymap.set('n', '<leader>gh', ':DiffviewFileHistory %<CR>', { desc = 'Diffview git history current file' }),
   vim.keymap.set('n', '<leader>ghq', ':DiffviewClose<CR>', { desc = 'Close diffview git history' }),
   vim.keymap.set('n', '-', ':Oil<CR>', { desc = 'Open parent directory oil' }),
-  vim.api.nvim_set_keymap('n', '<leader>qn', "<cmd>:lua require('quicknote').NewNoteAtCurrentLine()<cr>", { desc = 'New quicknote at current line' }),
-  vim.api.nvim_set_keymap('n', '<leader>qnt', "<cmd>:lua require('quicknote').ToggleNoteSigns()<cr>", { desc = 'Toggle quicknote icon show' }),
-  vim.api.nvim_set_keymap('n', '<leader>qnl', "<cmd>:lua require('quicknote').ListNotesForCWD()	<cr>", { desc = 'List quicknotes current work directory' }),
-  vim.api.nvim_set_keymap('n', '<leader>qndd', "<cmd>:lua require('quicknote').DeleteNoteAtCurrentLine()<cr>", { desc = 'Delete quicknote current line' }),
 }
