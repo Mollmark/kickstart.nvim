@@ -3,9 +3,9 @@ return {
   dependencies = { 'nvim-tree/nvim-web-devicons' },
   config = function()
     require('lualine').setup {
-      -- options = {
-      --  theme = 'americano',
-      -- },
+      options = {
+        theme = 'oldworld',
+      },
       sections = {
         lualine_c = {
           { 'filename', path = 2 },

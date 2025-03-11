@@ -83,6 +83,10 @@ I hope you enjoy your Neovim journey,
 
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
+-- source the settings in .vimrc file
+vim.cmd 'set runtimepath^=~/.vim runtimepath+=~/.vim/after'
+vim.o.packpath = vim.o.runtimepath
+vim.cmd 'source ~/.vimrc'
 
 -- Set <space> as the leader key
 -- See `:help mapleader`
@@ -239,7 +243,7 @@ vim.opt.rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  --'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -388,7 +392,6 @@ require('lazy').setup({
       -- Enable Telescope extensions if they are installed
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
-      pcall(require('telescope').load_extension, 'quicknote')
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
@@ -571,7 +574,12 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
-        ts_ls = {},
+        ts_ls = {
+          flags = {
+            allow_incremental_sync = false,
+            debounce_text_changes = 500,
+          },
+        },
         tailwindcss = {
           filetypes = {
             'css',
@@ -709,12 +717,54 @@ require('lazy').setup({
       local luasnip = require 'luasnip'
       luasnip.config.setup {}
 
+      -- If you want insert `(` after select function or method item
+      local cmp_autopairs = require 'nvim-autopairs.completion.cmp'
+
+      local handlers = require 'nvim-autopairs.completion.handlers'
+
+      cmp.event:on(
+        'confirm_done',
+        cmp_autopairs.on_confirm_done {
+          filetypes = {
+            -- "*" is a alias to all filetypes
+            ['*'] = {
+              ['('] = {
+                kind = {
+                  cmp.lsp.CompletionItemKind.Function,
+                  cmp.lsp.CompletionItemKind.Method,
+                },
+                handler = handlers['*'],
+              },
+            },
+            lua = {
+              ['('] = {
+                kind = {
+                  cmp.lsp.CompletionItemKind.Function,
+                  cmp.lsp.CompletionItemKind.Method,
+                },
+                ---@param char string
+                ---@param item table item completion
+                ---@param bufnr number buffer number
+                ---@param rules table
+                ---@param commit_character table<string>
+                handler = function(char, item, bufnr, rules, commit_character)
+                  -- Your handler function. Inspect with print(vim.inspect{char, item, bufnr, rules, commit_character})
+                end,
+              },
+            },
+            -- Disable for tex
+            tex = false,
+          },
+        }
+      )
+
       cmp.setup {
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body)
           end,
         },
+        experimental = { ghost_text = true },
         completion = { completeopt = 'menu,menuone,noinsert' },
 
         -- For an understanding of why these mappings were
@@ -768,6 +818,7 @@ require('lazy').setup({
           { name = 'luasnip' },
           { name = 'path' },
           { name = 'codeium' },
+          { name = 'nvim_lsp_signature_help' },
         },
       }
       cmp.setup.filetype({ 'sql' }, {
@@ -784,20 +835,55 @@ require('lazy').setup({
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
     --'folke/tokyonight.nvim',
+    --'ellisonleao/gruvbox.nvim',
     --'sainnhe/gruvbox-material',
+    --'neanias/everforest-nvim',
     --'diegoulloao/neofusion.nvim',
     --'catppuccin/nvim',
-    'cpwrs/americano.nvim',
-    name = 'americano',
+    'dgox16/oldworld.nvim',
+    --'cpwrs/americano.nvim',
     priority = 1000, -- Make sure to load this before all the other start plugins.
-    init = function()
+    config = function()
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'
-      require('americano').setup {
-        terminal = true, -- Set terminal colors
-        overrides = {}, -- Override americano highlight groups
+      require('oldworld').setup {
+        terminal_colors = true, -- enable terminal colors
+        variants = 'oled', -- Two variants availables: default and cooler
+        styles = { -- You can pass the style using the format: style = true
+          comments = { italic = true }, -- style for comments
+          keywords = {}, -- style for keywords
+          identifiers = {}, -- style for identifiers
+          functions = {}, -- style for functions
+          variables = {}, -- style for variables
+          booleans = {}, -- style for booleans
+        },
+        integrations = { -- You can disable/enable integrations
+          alpha = true,
+          cmp = true,
+          flash = true,
+          gitsigns = true,
+          hop = false,
+          indent_blankline = true,
+          lazy = true,
+          lsp = true,
+          markdown = true,
+          mason = true,
+          navic = false,
+          neo_tree = true,
+          neorg = true,
+          noice = true,
+          notify = true,
+          rainbow_delimiters = true,
+          telescope = true,
+          treesitter = true,
+        },
+        highlight_overrides = {},
       }
+      -- require('americano').setup {
+      --   terminal = true, -- Set terminal colors
+      --   overrides = {}, -- Override americano highlight groups
+      -- }
       -- require('catppuccin').setup {
       --   flavour = 'auto', -- latte, frappe, macchiato, mocha
       --   background = { -- :h background
@@ -868,25 +954,28 @@ require('lazy').setup({
       --     -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
       --   },
       -- }
-      vim.cmd.colorscheme 'americano'
-      --vim.cmd 'highlight TelescopeBorder guibg=none'
-      --vim.cmd 'highlight TelescopeTitle guibg=none'
-      --vim.cmd 'highlight TelescopePrompt guibg=none'
-      --vim.cmd 'highlight TelescopePreviewNormal guibg=none'
+
+      vim.cmd 'colorscheme oldworld'
+      -- vim.cmd 'highlight TelescopeBorder guibg=none'
+      -- vim.cmd 'highlight TelescopeTitle guibg=none'
+      -- vim.cmd 'highlight TelescopePrompt guibg=none'
+      -- vim.cmd 'highlight TelescopePreviewNormal guibg=none'
       --vim.cmd 'highlight TelescopeResultNormal fg=#ffffff'
       --vim.cmd 'highlight TelescopePromptNormal fg=#ffffff'
       --vim.api.nvim_set_hl(0, 'FloatBorder', {bg='#3B4252', fg='#5E81AC'})
-      vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
-      vim.api.nvim_set_hl(0, 'TelescopeNormal', { bg = 'none' })
-      vim.api.nvim_set_hl(0, 'TelescopeBorder', { bg = 'none' })
-      vim.api.nvim_set_hl(0, 'TelescopePreviewTitle', { bg = 'none' })
-      vim.api.nvim_set_hl(0, 'TelescopePreviewTitle', { fg = 'none' })
-      vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', { bg = 'none' })
-      vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', { fg = '#625f5f' })
-      vim.api.nvim_set_hl(0, 'Whitespace', { fg = '#373434' })
+      --vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+      --vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+      --vim.api.nvim_set_hl(0, 'TelescopeNormal', { bg = 'none' })
+      --vim.api.nvim_set_hl(0, 'TelescopeBorder', { bg = 'none' })
+      --vim.api.nvim_set_hl(0, 'TelescopePreviewTitle', { bg = 'none' })
+      --vim.api.nvim_set_hl(0, 'TelescopePreviewTitle', { fg = 'none' })
+      --vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', { bg = 'none' })
+      --vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', { fg = '#625f5f' })
+      --vim.api.nvim_set_hl(0, 'Whitespace', { fg = '#373434' })
+      vim.api.nvim_set_hl(0, 'NoiceCmdlinePopup', { bg = '#161617' })
       -- You can configure highlights by doing something like:
       -- vim.cmd.hi 'Comment gui=none'
-      vim.cmd.hi 'Normal guibg=none'
+      --vim.cmd.hi 'Normal guibg=none'
     end,
   },
 
